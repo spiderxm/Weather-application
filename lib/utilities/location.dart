@@ -5,7 +5,7 @@ class Location {
     Map location = new Map();
     try {
       Position position =
-      await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       location['latitude'] = position.latitude;
       location['longitude'] = position.longitude;
       location['altitude'] = position.altitude;
@@ -21,7 +21,7 @@ class Location {
     Map location = new Map();
     try {
       Position position =
-      await getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+          await getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
       location['latitude'] = position.latitude;
       location['longitude'] = position.longitude;
       location['altitude'] = position.altitude;
