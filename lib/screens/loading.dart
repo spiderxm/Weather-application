@@ -17,7 +17,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   void getData() async {
     Location location = new Location();
-    var data = await location.getLocationLowAccuracy();
+    var data = await location.getLocationHighAccuracy();
     String url;
     try {
       url =
@@ -32,11 +32,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
       NetworkHelper networkHelper2 = new NetworkHelper(url);
       var weatherDataWeekly = await networkHelper2.GET();
       var dailyData = weatherDataWeekly['daily'];
-      print(dailyData.length);
-      print(dailyData[0]);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => WeatherScreen(weatherData,dailyData)),
+        MaterialPageRoute(
+            builder: (context) => WeatherScreen(weatherData, dailyData)),
       );
     } catch (e) {
       print(e);
@@ -46,13 +45,35 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: SpinKitFadingFour(
-          color: Colors.grey,
-          size: 80,
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "Climate",
+            style: TextStyle(color: Colors.black, fontSize: 24),
+          ),
         ),
+        backgroundColor: Colors.white,
       ),
+      backgroundColor: Colors.white,
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              "Getting Weather Information",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          SpinKitFadingFour(
+            color: Colors.black,
+          )
+        ],
+      )),
     );
   }
 }

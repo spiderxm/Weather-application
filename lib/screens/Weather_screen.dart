@@ -84,24 +84,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   flex: 4,
                 ),
                 Expanded(
-                    child: Center(
-                        child: Text(
-                  data[i]['temp']['min'].toStringAsFixed(1) + '°',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 22),
-                )),
-                flex: 3,),
+                  child: Center(
+                      child: Text(
+                    data[i]['temp']['min'].toStringAsFixed(1) + '°',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 22),
+                  )),
+                  flex: 3,
+                ),
                 Expanded(
                     child: Center(
                         child: Text(
-                  data[i]['temp']['max'].toStringAsFixed(1) + '°',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 22),
-                )),flex:3)
+                      data[i]['temp']['max'].toStringAsFixed(1) + '°',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 22),
+                    )),
+                    flex: 3)
               ],
             ),
           ),
