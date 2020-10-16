@@ -1,6 +1,7 @@
+import 'package:climate/utilities/networking.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'Search_city.dart';
 
 class WeatherScreen extends StatefulWidget {
   WeatherScreen(this.Weather, this.DailyWeatherData);
@@ -23,6 +24,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   String description;
   String iconUrl = 'http://openweathermap.org/img/wn/50d@2x.png';
   var visibility;
+  List<Widget> Forecast = [];
   DateTime date;
   var day;
   List<String> days = [
@@ -52,8 +54,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   List<Widget> getDailyData() {
     List<Widget> daily = [];
     var data = widget.DailyWeatherData;
-    print(data.length);
-    print(data[0]);
     for (int i = 1; i < data.length; i++) {
       int time = data[i]['dt'] * 1000;
       DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(time);
@@ -113,8 +113,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return daily;
   }
 
-  @override
-  void initState() {
+  void updateUI() {
+    print("Hello");
     var weather = widget.Weather;
     setState(() {
       temp = weather['main']['temp'];
@@ -132,13 +132,50 @@ class _WeatherScreenState extends State<WeatherScreen> {
       date =
           DateTime.fromMillisecondsSinceEpoch(weather['sys']['sunset'] * 1000);
       day = date.weekday;
+      Forecast = getDailyData();
     });
+  }
+
+  @override
+  void initState() {
+    updateUI();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        onPressed: () async{
+          String url;
+          var city = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SearchViaCity()));
+          print(city);
+          try {
+            url =
+            "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=63644879657c8bb17af64deabc41a81c&units=metric";
+            NetworkHelper networkHelper = new NetworkHelper(url);
+            var weatherData = await networkHelper.GET();
+            if(weatherData == "Error"){
+              throw Exception();
+            }
+            print(weatherData);
+            var lat = weatherData['coord']['lat'];
+            var lon = weatherData['coord']['lon'];
+            url = "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&cnt=8&exclude=hourly,minutely&appid=63644879657c8bb17af64deabc41a81c&units=metric";
+            print(url);
+            NetworkHelper networkHelper2 = new NetworkHelper(url);
+            var weatherDataWeekly = await networkHelper2.GET();
+            if(weatherData == "Error"){
+              throw Exception();
+            }
+            var dailyData = weatherDataWeekly['daily'];
+            widget.DailyWeatherData = dailyData;
+            widget.Weather = weatherData;
+            updateUI();
+          } catch (e) {
+            print(e);
+          }
+        },
         child: Icon(Icons.search),
       ),
       backgroundColor: Color(0xfff7f7fa),
@@ -454,7 +491,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
               ),
               Column(
-                children: getDailyData(),
+                children: Forecast,
               )
             ],
           ),
