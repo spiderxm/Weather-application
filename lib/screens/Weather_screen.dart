@@ -145,7 +145,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
     String url;
     var city = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => SearchViaCity()));
-    print(city);
     try {
       url =
           "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=63644879657c8bb17af64deabc41a81c&units=metric";
@@ -159,7 +158,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
       var lon = weatherData['coord']['lon'];
       url =
           "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&cnt=8&exclude=hourly,minutely&appid=63644879657c8bb17af64deabc41a81c&units=metric";
-      print(url);
       NetworkHelper networkHelper2 = new NetworkHelper(url);
       var weatherDataWeekly = await networkHelper2.GET();
       if (weatherData == "Error") {
@@ -170,7 +168,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
       widget.Weather = weatherData;
       updateUI();
     } catch (e) {
-      print(e);
       final snackBar = SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text('Invalid City Name'),
