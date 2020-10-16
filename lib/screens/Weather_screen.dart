@@ -34,6 +34,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
     "Friday",
     "Saturday"
   ];
+  List<String> month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
 
   List<Widget> getDailyData() {
     List<Widget> daily = [];
@@ -41,6 +55,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     print(data.length);
     print(data[0]);
     for (int i = 1; i < data.length; i++) {
+      int time = data[i]['dt'] * 1000;
+      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(time);
       daily.add(Container(
         height: 100,
         child: Padding(
@@ -55,11 +71,37 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   child: Image.network("http://openweathermap.org/img/wn/" +
                       data[i]['weather'][0]['icon'] +
                       "@2x.png"),
-                  flex: 1,
+                  flex: 2,
                 ),
-                Expanded(child: Text("Date")),
-                Expanded(child: Text(data[i]['temp']['min'].toStringAsFixed(1))),
-                Expanded(child: Text(data[i]['temp']['max'].toStringAsFixed(1)))
+                Expanded(
+                  child: Text(
+                    dateTime.day.toString() + " " + month[dateTime.month - 1],
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 18),
+                  ),
+                  flex: 4,
+                ),
+                Expanded(
+                    child: Center(
+                        child: Text(
+                  data[i]['temp']['min'].toStringAsFixed(1) + '°',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 22),
+                )),
+                flex: 3,),
+                Expanded(
+                    child: Center(
+                        child: Text(
+                  data[i]['temp']['max'].toStringAsFixed(1) + '°',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 22),
+                )),flex:3)
               ],
             ),
           ),
@@ -400,7 +442,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 child: Row(
                   children: [
                     Text(
-                      "Future Weather",
+                      "Forecast",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
