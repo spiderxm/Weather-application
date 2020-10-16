@@ -141,43 +141,60 @@ class _WeatherScreenState extends State<WeatherScreen> {
     updateUI();
   }
 
+  Future<void> cityWeather(BuildContext context) async {
+    String url;
+    var city = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SearchViaCity()));
+    print(city);
+    try {
+      url =
+          "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=63644879657c8bb17af64deabc41a81c&units=metric";
+      NetworkHelper networkHelper = new NetworkHelper(url);
+      var weatherData = await networkHelper.GET();
+      if (weatherData == "Error") {
+        throw Exception("Invalid City");
+      }
+      print(weatherData);
+      var lat = weatherData['coord']['lat'];
+      var lon = weatherData['coord']['lon'];
+      url =
+          "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&cnt=8&exclude=hourly,minutely&appid=63644879657c8bb17af64deabc41a81c&units=metric";
+      print(url);
+      NetworkHelper networkHelper2 = new NetworkHelper(url);
+      var weatherDataWeekly = await networkHelper2.GET();
+      if (weatherData == "Error") {
+        throw Exception("Invalid City");
+      }
+      var dailyData = weatherDataWeekly['daily'];
+      widget.DailyWeatherData = dailyData;
+      widget.Weather = weatherData;
+      updateUI();
+    } catch (e) {
+      print(e);
+      final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text('Invalid City Name'),
+        action: SnackBarAction(
+          label: "Cancel",
+          onPressed: () {
+
+          },
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-          String url;
-          var city = await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SearchViaCity()));
-          print(city);
-          try {
-            url =
-            "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=63644879657c8bb17af64deabc41a81c&units=metric";
-            NetworkHelper networkHelper = new NetworkHelper(url);
-            var weatherData = await networkHelper.GET();
-            if(weatherData == "Error"){
-              throw Exception();
-            }
-            print(weatherData);
-            var lat = weatherData['coord']['lat'];
-            var lon = weatherData['coord']['lon'];
-            url = "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&cnt=8&exclude=hourly,minutely&appid=63644879657c8bb17af64deabc41a81c&units=metric";
-            print(url);
-            NetworkHelper networkHelper2 = new NetworkHelper(url);
-            var weatherDataWeekly = await networkHelper2.GET();
-            if(weatherData == "Error"){
-              throw Exception();
-            }
-            var dailyData = weatherDataWeekly['daily'];
-            widget.DailyWeatherData = dailyData;
-            widget.Weather = weatherData;
-            updateUI();
-          } catch (e) {
-            print(e);
-          }
-        },
-        child: Icon(Icons.search),
-      ),
+      floatingActionButton: new Builder(builder: (BuildContext context) {
+        return new FloatingActionButton(
+            child: Icon(Icons.search),
+            onPressed: () async {
+              await cityWeather(context);
+            });
+      }),
       backgroundColor: Color(0xfff7f7fa),
       body: SingleChildScrollView(
         child: Container(
