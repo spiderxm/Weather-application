@@ -71,16 +71,36 @@ class _WeatherScreenState extends State<WeatherScreen> {
               height: 40,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                  child: Text(
-                location,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 36),
-              )),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        child: Text(
+                          location,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 36),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(date.day.toString() + "-" + date.month.toString() + "-" + date.year.toString(),
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black),
+                      ),
+                      ),
+                    )
+                  ],
+                )),
             Padding(
               padding: const EdgeInsets.all(18.0),
               child: Card(
@@ -316,6 +336,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.w300),
                                   ),
+                                  Text(
+                                    date.hour.toString() +
+                                        ":" +
+                                        date.minute.toString(),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 22),
+                                  )
                                 ],
                               ),
                             ),
