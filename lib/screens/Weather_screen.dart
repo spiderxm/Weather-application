@@ -173,9 +173,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         content: Text('Invalid City Name'),
         action: SnackBarAction(
           label: "Cancel",
-          onPressed: () {
-
-          },
+          onPressed: () {},
         ),
       );
       Scaffold.of(context).showSnackBar(snackBar);
@@ -258,13 +256,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     iconUrl,
                                     color: Colors.white,
                                   ),
-                                  Text(
-                                    description,
-                                    style: TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.w900,
-                                        color: Color(0xfff6f8ff)),
-                                  )
+                                  new Expanded(
+                                    child: new SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: new Text(
+                                        description,
+                                        style: TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xfff6f8ff)),
+                                      ),
+                                    ),
+                                  ),
                                 ])),
                             Expanded(
                                 child: Column(
